@@ -1,0 +1,39 @@
+package com.woodstock.app.entity;
+
+import com.woodstock.app.models.response.TreeTypeResponse;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
+
+@Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class TreeType extends BaseEntity {
+
+    @Id
+    @GeneratedValue
+    @UuidGenerator
+    private UUID id;
+
+    @NotBlank
+    private String name;
+
+    public TreeTypeResponse toResponse(){
+        return TreeTypeResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .createAt(this.getCreateAt())
+                .updateAt(this.getUpdateAt())
+                .build();
+    }
+
+
+}
