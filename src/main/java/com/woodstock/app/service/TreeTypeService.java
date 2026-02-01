@@ -5,6 +5,8 @@ import com.woodstock.app.models.request.TreeTypeRequest;
 import com.woodstock.app.models.response.TreeTypeResponse;
 import com.woodstock.app.repositorty.TreeTypeRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -33,8 +35,20 @@ public class TreeTypeService implements ServiceInterface<TreeTypeRequest, TreeTy
     }
 
     @Override
+    public Page<TreeTypeResponse> getAll(Pageable pageable) {
+
+       return repository.findAll(pageable).map(TreeType::toResponse);
+    }
+
+    @Override
     public TreeTypeResponse deleteById(UUID id) {
-        return null;
+        TreeType target = repository.findById(id)
+                .orElseThrow(
+                        () -> new RuntimeException("there no tree type with ID : " + id)
+                );
+        repository.delete(target);
+
+        return target.toResponse();
     }
 
     @Override

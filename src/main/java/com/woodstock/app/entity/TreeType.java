@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SoftDelete
 public class TreeType extends BaseEntity {
 
     @Id
