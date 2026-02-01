@@ -1,5 +1,6 @@
 package com.woodstock.app.models.request;
 
+import com.woodstock.app.entity.TreeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
