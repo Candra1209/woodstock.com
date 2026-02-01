@@ -20,5 +20,6 @@ public class TreeTypeRequest {
 
     private UUID id;
     private String name;
+    private String typeCode;
 
 }

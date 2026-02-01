@@ -1,6 +1,7 @@
 package com.woodstock.app.entity;
 
 import com.woodstock.app.models.response.TreeTypeResponse;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,10 +29,14 @@ public class TreeType extends BaseEntity {
     @NotBlank
     private String name;
 
+    @Column(name = "type_code")
+    private String typeCode;
+
     public TreeTypeResponse toResponse(){
         return TreeTypeResponse.builder()
                 .id(this.id)
                 .name(this.name)
+                .typeCode(this.typeCode)
                 .createAt(this.getCreateAt())
                 .updateAt(this.getUpdateAt())
                 .build();

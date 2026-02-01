@@ -16,6 +16,7 @@ public class TreeTypeResponse {
 
     private UUID id;
     private String name;
+    private String typeCode;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
