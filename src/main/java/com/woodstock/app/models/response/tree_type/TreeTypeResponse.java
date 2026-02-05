@@ -1,4 +1,4 @@
-package com.woodstock.app.models.response;
+package com.woodstock.app.models.response.tree_type;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

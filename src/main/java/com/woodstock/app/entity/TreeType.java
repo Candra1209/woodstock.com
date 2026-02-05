@@ -1,6 +1,6 @@
 package com.woodstock.app.entity;
 
-import com.woodstock.app.models.response.TreeTypeResponse;
+import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

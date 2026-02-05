@@ -2,9 +2,10 @@ package com.woodstock.app.controller;
 
 import com.woodstock.app.models.request.TreeTypeRequest;
 import com.woodstock.app.models.response.SuccessResponse;
-import com.woodstock.app.models.response.TreeTypeResponse;
+import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.service.TreeTypeService;
 import com.woodstock.app.utils.constants.RouteAppConstant;
+import com.woodstock.app.utils.exception.InvalidQueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,7 +61,7 @@ public class TreeTypeController {
                 Page<TreeTypeResponse> paged = service.getAllWithDeleted(pageable);
                 return assembler.toModel(paged);
             }
-            default -> throw new RuntimeException("BAD REQUEST : invalid status type");
+            default -> throw new InvalidQueryParameter("invalid status type for get all tree type : use either 'active', 'deleted', or 'all'");
         }
     }
 
@@ -116,7 +117,7 @@ public class TreeTypeController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     private SuccessResponse<Object> deleteTreeTypeByID(@PathVariable(name = "id") String target){
 
         TreeTypeResponse data = service.deleteById(UUID.fromString(target));
@@ -129,7 +130,7 @@ public class TreeTypeController {
 
     }
 
-    @PatchMapping("/{id}/recover")
+    @PatchMapping("/recover/{id}")
     private SuccessResponse<Object> recoverTreeType(@PathVariable String id){
         service.recover(UUID.fromString(id));
         return SuccessResponse.builder()
@@ -138,7 +139,7 @@ public class TreeTypeController {
                 .build();
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/update/{id}")
     private SuccessResponse<Object> updateTreeType(@PathVariable String id, @RequestBody TreeTypeRequest request){
 
         TreeTypeResponse data = service.update(request, UUID.fromString(id));
