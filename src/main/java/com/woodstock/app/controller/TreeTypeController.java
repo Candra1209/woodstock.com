@@ -1,6 +1,5 @@
 package com.woodstock.app.controller;
 
-import com.woodstock.app.entity.TreeType;
 import com.woodstock.app.models.request.TreeTypeRequest;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.TreeTypeResponse;
@@ -15,9 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.service.annotation.DeleteExchange;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Map;
 import java.util.UUID;
 
@@ -50,17 +47,20 @@ public class TreeTypeController {
 
         Pageable pageable = PageRequest.of(page,size);
 
-        if (status.equals("active")){
-            Page<TreeTypeResponse> paged = service.getAll(pageable);
-            return  assembler.toModel(paged);
-        } else if (status.equals("deleted")) {
-            Page<TreeTypeResponse> paged = service.getAllDeleted(pageable);
-            return  assembler.toModel(paged);
-        } else if (status.equals("all")) {
-            Page<TreeTypeResponse> paged = service.getAllWithDeleted(pageable);
-            return  assembler.toModel(paged);
-        }else {
-            throw new RuntimeException("BAD REQUEST : invalid status type");
+        switch (status) {
+            case "active" -> {
+                Page<TreeTypeResponse> paged = service.getAll(pageable);
+                return assembler.toModel(paged);
+            }
+            case "deleted" -> {
+                Page<TreeTypeResponse> paged = service.getAllDeleted(pageable);
+                return assembler.toModel(paged);
+            }
+            case "all" -> {
+                Page<TreeTypeResponse> paged = service.getAllWithDeleted(pageable);
+                return assembler.toModel(paged);
+            }
+            default -> throw new RuntimeException("BAD REQUEST : invalid status type");
         }
     }
 
