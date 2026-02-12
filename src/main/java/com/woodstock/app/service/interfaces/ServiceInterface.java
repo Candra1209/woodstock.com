@@ -1,4 +1,4 @@
-package com.woodstock.app.service;
+package com.woodstock.app.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

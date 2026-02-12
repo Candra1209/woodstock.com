@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(RouteAppConstant.TREE_TYPE)
+@RequestMapping("/v1"+RouteAppConstant.TREE_TYPE)
 public class TreeTypeController {
 
     @Autowired
