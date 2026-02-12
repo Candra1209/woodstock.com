@@ -15,6 +15,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 import java.util.UUID;
@@ -97,6 +98,8 @@ public class TreeTypeController {
 
         TreeTypeResponse data = service.getById(UUID.fromString(id));
 
+
+
         return SuccessResponse.builder()
                 .status(HttpStatus.FOUND)
                 .message("tree type has been found")
@@ -132,7 +135,9 @@ public class TreeTypeController {
 
     @PatchMapping("/recover/{id}")
     private SuccessResponse<Object> recoverTreeType(@PathVariable String id){
+
         service.recover(UUID.fromString(id));
+
         return SuccessResponse.builder()
                 .status(HttpStatus.ACCEPTED)
                 .message("Recovered tree type with ID : " + id)
