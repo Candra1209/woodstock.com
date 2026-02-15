@@ -4,27 +4,28 @@ import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidUUID(IllegalArgumentException ex, HttpServletRequest request) {
+    @ExceptionHandler({IllegalArgumentException.class,
+            InvalidDataAccessApiUsageException.class,
+            PropertyReferenceException.class})
+    public ResponseEntity<ErrorResponse> handleBadRequest(Exception ex, HttpServletRequest request) {
 
-        if (ex.getMessage() != null && ex.getMessage().contains("Invalid UUID")) {
             return ResponseEntity.badRequest().body(
                     ErrorResponse.builder()
                             .status(HttpStatus.BAD_REQUEST.value())
                             .url(UrlBuilderHelper.getFullUrl(request))
-                            .message("Invalid UUID format")
+                            .message("BAD REQUEST : " + ex.getMessage())
                             .build()
             );
-        }
-
-        throw ex; // lempar lagi kalau bukan UUID
     }
 
     @ExceptionHandler(Exception.class)

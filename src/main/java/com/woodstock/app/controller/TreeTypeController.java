@@ -3,7 +3,7 @@ package com.woodstock.app.controller;
 import com.woodstock.app.models.request.TreeTypeRequest;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
-import com.woodstock.app.service.TreeTypeService;
+import com.woodstock.app.service.impelment.TreeTypeService;
 import com.woodstock.app.utils.constants.RouteAppConstant;
 import com.woodstock.app.utils.exception.InvalidQueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 import java.util.UUID;

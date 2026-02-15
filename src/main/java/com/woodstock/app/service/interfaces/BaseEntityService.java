@@ -1,5 +1,8 @@
 package com.woodstock.app.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,5 +19,7 @@ public interface BaseEntityService<
     R delete(UUID id);
     void delete(R r);
     R Update(R r);
+    Page<R> getPagging(Pageable pageable);
+    Page<R> getPagging(Pageable pageable, Specification<R> specification);
 
 }

@@ -1,5 +1,6 @@
 package com.woodstock.app.models.response.tree_type;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +20,8 @@ public class TreeTypeResponse {
     private String typeCode;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean isDeleted;
 
 }
