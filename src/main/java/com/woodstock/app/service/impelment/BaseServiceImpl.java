@@ -4,6 +4,7 @@ import com.woodstock.app.entity.TreeType;
 import com.woodstock.app.service.interfaces.BaseEntityService;
 import com.woodstock.app.utils.exception.CannotFoundTreeType;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 public abstract class BaseServiceImpl<
         T extends JpaRepository<R , UUID> & JpaSpecificationExecutor<R>,
         R > implements BaseEntityService<T, R> {
@@ -41,6 +43,8 @@ public abstract class BaseServiceImpl<
 
     @Override
     public R findbyId(UUID id) {
+
+        log.info("try find record by id");
         return repository.findById(id)
                 .orElseThrow(
                         () -> new CannotFoundTreeType("there no tree type with required id : " + id)
@@ -54,7 +58,7 @@ public abstract class BaseServiceImpl<
 
     @Override
     public R delete(UUID id) {
-
+        log.info("delete record by id");
         R r = findbyId(id);
         delete(r);
 
@@ -63,7 +67,9 @@ public abstract class BaseServiceImpl<
 
     @Override
     public void delete(R r) {
+
         repository.delete(r);
+        log.info("record deleted!");
     }
 
     @Override

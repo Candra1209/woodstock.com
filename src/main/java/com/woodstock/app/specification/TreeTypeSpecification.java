@@ -28,21 +28,24 @@ public class TreeTypeSpecification {
 
             if (treeTypeSearch.getCode() != null && !treeTypeSearch.getCode().isEmpty()){
 
-                log.info("build criteria builder for field code contains");
+                log.info("build criteria builder for field typeCode contains");
                 Predicate codePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("typeCode")), "%"+treeTypeSearch.getCode().toLowerCase()+"%" );
 
                 listPredicate.add(codePredicate);
 
             }
 
-//            if (treeTypeSearch.getInclude_deleted() != null && treeTypeSearch.getInclude_deleted()) {
+            if (treeTypeSearch.getInclude_deleted() != null && !treeTypeSearch.getInclude_deleted()){
+                log.info("include_deleted = false");
+                Predicate includeDeleted = criteriaBuilder.isFalse(root.get("isDeleted"));
+
+                listPredicate.add(includeDeleted);
+
+            }else{
+                log.info("include_deleted = true");
+            }
+
 //
-//                log.info();("build criteria builder for include deleted");
-//                Predicate includeDeletedPredicate = criteriaBuilder.or(criteriaBuilder.isTrue(root.get("deleted")), criteriaBuilder.isFalse(root.get("deleted")));
-//
-//                listPredicate.add(includeDeletedPredicate);
-//
-//            }
 
             return criteriaBuilder.and(listPredicate.toArray(new Predicate[0]));
         };

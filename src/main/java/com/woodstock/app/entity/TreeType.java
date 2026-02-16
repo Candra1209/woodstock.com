@@ -46,5 +46,16 @@ public class TreeType extends BaseEntity {
                 .build();
     }
 
+    public TreeTypeResponse toFullResponse(){
+        return TreeTypeResponse.builder()
+                .id(getId())
+                .name(getName())
+                .typeCode(getTypeCode())
+                .createAt(getCreateAt())
+                .updateAt(getUpdateAt())
+                .isDeleted(isDeleted())
+                .build();
+    }
+
 
 }

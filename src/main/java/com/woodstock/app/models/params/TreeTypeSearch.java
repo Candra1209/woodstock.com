@@ -9,7 +9,5 @@ import lombok.NoArgsConstructor;
 public class TreeTypeSearch {
     private String name;
     private String code;
-
-//    @JsonProperty("include_deleted")
-//    private Boolean include_deleted;
+    private Boolean include_deleted = false;
 }
