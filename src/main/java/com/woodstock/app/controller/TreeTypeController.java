@@ -1,6 +1,6 @@
 package com.woodstock.app.controller;
 
-import com.woodstock.app.models.request.TreeTypeRequest;
+import com.woodstock.app.models.request.tree_type.TreeTypeRequest;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.service.impelment.TreeTypeService;

@@ -1,15 +1,10 @@
-package com.woodstock.app.models.request;
+package com.woodstock.app.models.request.tree_type;
 
-import com.woodstock.app.entity.TreeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Setter

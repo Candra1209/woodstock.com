@@ -4,7 +4,7 @@ import com.woodstock.app.entity.TreeType;
 import com.woodstock.app.models.params.PageParams;
 import com.woodstock.app.models.params.SortParams;
 import com.woodstock.app.models.params.TreeTypeSearch;
-import com.woodstock.app.models.request.TreeTypeRequest;
+import com.woodstock.app.models.request.tree_type.TreeTypeRequest;
 import com.woodstock.app.models.response.PagingResponse;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;

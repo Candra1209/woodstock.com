@@ -1,10 +1,7 @@
 package com.woodstock.app.entity;
 
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -14,6 +11,7 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.UUID;
 
 @Entity
+@Table(name = "tree_type")
 @Setter
 @Getter
 @AllArgsConstructor

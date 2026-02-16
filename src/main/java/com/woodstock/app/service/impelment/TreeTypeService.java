@@ -1,7 +1,7 @@
 package com.woodstock.app.service.impelment;
 
 import com.woodstock.app.entity.TreeType;
-import com.woodstock.app.models.request.TreeTypeRequest;
+import com.woodstock.app.models.request.tree_type.TreeTypeRequest;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.repositorty.TreeTypeRepositoryInterface;
 import com.woodstock.app.service.interfaces.ServiceInterface;
