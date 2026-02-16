@@ -45,8 +45,6 @@ public class TreeTypeSpecification {
                 log.info("include_deleted = true");
             }
 
-//
-
             return criteriaBuilder.and(listPredicate.toArray(new Predicate[0]));
         };
     }

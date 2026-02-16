@@ -44,7 +44,7 @@ public abstract class BaseServiceImpl<
     @Override
     public R findbyId(UUID id) {
 
-        log.info("try find record by id");
+        log.info("try find record by id from database");
         return repository.findById(id)
                 .orElseThrow(
                         () -> new CannotFoundTreeType("there no tree type with required id : " + id)

@@ -66,6 +66,19 @@ public class TreeTypeControllerV2 {
         return ResponseEntity.ok(result);
     };
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SuccessResponse<TreeTypeResponse>> getTreeTypeById(@PathVariable String id){
+
+        log.info("try get tree type by id");
+        SuccessResponse<TreeTypeResponse> result = SuccessResponse.<TreeTypeResponse>builder()
+                .status(HttpStatus.OK)
+                .message("tree type with id : "+ id +" deleted successfully")
+                .data(treeTypeServiceV2.findbyId(UUID.fromString(id)).toFullResponse())
+                .build();
+
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<PagingResponse<TreeTypeResponse>> getAllTreeType(
             @ModelAttribute PageParams pageParams,
