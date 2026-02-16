@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SoftDelete
+@SQLDelete(sql = "UPDATE tree_type SET deleted = true WHERE id = ?")
 public class TreeType extends BaseEntity {
 
     @Id
@@ -32,6 +32,9 @@ public class TreeType extends BaseEntity {
 
     @Column(name = "type_code")
     private String typeCode;
+
+    @Column(name = "deleted")
+    private boolean isDeleted = false;
 
     public TreeTypeResponse toResponse(){
         return TreeTypeResponse.builder()

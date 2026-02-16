@@ -63,7 +63,7 @@ public class TreeTypeControllerV2 {
 
         Specification<TreeType> specification = TreeTypeSpecification.getSpecification(search);
 
-        log.trace("Get All tree-type");
+        log.info("Get All tree-type");
         Page<TreeType> result = treeTypeServiceV2.getPagging(pageable, specification);
 
         return ResponseEntity.ok(mapper.mappedToResponse(result.map(TreeType::toResponse)));

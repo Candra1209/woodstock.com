@@ -19,7 +19,7 @@ public class TreeTypeSpecification {
 
             if (treeTypeSearch.getName() != null && !treeTypeSearch.getName().isEmpty()) {
 
-                log.trace("build criteria builder for field name contains");
+                log.info("build criteria builder for field name contains");
                 Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%"+treeTypeSearch.getName().toLowerCase()+"%" );
 
                 listPredicate.add(namePredicate);
@@ -28,7 +28,7 @@ public class TreeTypeSpecification {
 
             if (treeTypeSearch.getCode() != null && !treeTypeSearch.getCode().isEmpty()){
 
-                log.trace("build criteria builder for field code contains");
+                log.info("build criteria builder for field code contains");
                 Predicate codePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("typeCode")), "%"+treeTypeSearch.getCode().toLowerCase()+"%" );
 
                 listPredicate.add(codePredicate);
@@ -37,7 +37,7 @@ public class TreeTypeSpecification {
 
 //            if (treeTypeSearch.getInclude_deleted() != null && treeTypeSearch.getInclude_deleted()) {
 //
-//                log.trace("build criteria builder for include deleted");
+//                log.info();("build criteria builder for include deleted");
 //                Predicate includeDeletedPredicate = criteriaBuilder.or(criteriaBuilder.isTrue(root.get("deleted")), criteriaBuilder.isFalse(root.get("deleted")));
 //
 //                listPredicate.add(includeDeletedPredicate);
