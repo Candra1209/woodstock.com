@@ -73,7 +73,7 @@ public class TreeTypeControllerV2 {
         SuccessResponse<TreeTypeResponse> result = SuccessResponse.<TreeTypeResponse>builder()
                 .status(HttpStatus.OK)
                 .message("tree type with id : "+ id +" deleted successfully")
-                .data(treeTypeServiceV2.findbyId(UUID.fromString(id)).toFullResponse())
+                .data(treeTypeServiceV2.getResponseById(UUID.fromString(id)))
                 .build();
 
         return ResponseEntity.ok(result);

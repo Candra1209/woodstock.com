@@ -14,7 +14,9 @@ public class MyRedisCacheManagerConfiguration {
     public RedisCacheManagerBuilderCustomizer myRedisCacheManagerBuilderCustomizer(){
 
         return builder -> builder
-                .withCacheConfiguration("treeType", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
+                .withCacheConfiguration("treeType", RedisCacheConfiguration
+                        .defaultCacheConfig(Thread.currentThread().getContextClassLoader())
+                        .entryTtl(Duration.ofMinutes(5)));
     }
 
 }

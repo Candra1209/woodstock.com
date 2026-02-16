@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @AllArgsConstructor
-public class TreeTypeResponse {
+public class TreeTypeResponse implements Serializable {
 
     private UUID id;
     private String name;
