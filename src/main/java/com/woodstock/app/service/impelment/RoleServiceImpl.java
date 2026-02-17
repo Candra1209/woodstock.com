@@ -3,6 +3,7 @@ package com.woodstock.app.service.impelment;
 import com.woodstock.app.entity.RoleEnum;
 import com.woodstock.app.entity.Roles;
 import com.woodstock.app.repositorty.RolesRepositoryInterface;
+import com.woodstock.app.utils.exception.DataNotFound;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,19 @@ public class RoleServiceImpl extends BaseServiceImpl<RolesRepositoryInterface, R
         super(repository, entityManager);
     }
 
-    public Optional<Roles> findByNameOptional(RoleEnum roleEnum){
+    public Roles findByName(RoleEnum roleEnum){
 
         log.info("Get role by name");
+        return repository.findByName(roleEnum)
+                .orElseThrow(
+                        () -> new DataNotFound("cannot found role by name " + roleEnum.toString())
+                );
+
+    }
+
+    public Optional<Roles> findByNameOptional(RoleEnum roleEnum){
+
+        log.info("Get role by name return optional");
         return repository.findByName(roleEnum);
 
     }

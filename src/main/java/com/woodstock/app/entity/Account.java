@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Account extends BaseEntity {
 
     @Id
     @UuidGenerator

@@ -2,6 +2,7 @@ package com.woodstock.app.config;
 
 import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.exception.AccountUserNotFound;
+import com.woodstock.app.utils.exception.ReEnteredPasswordNotEqual;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -17,7 +18,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({IllegalArgumentException.class,
             InvalidDataAccessApiUsageException.class,
-            PropertyReferenceException.class})
+            PropertyReferenceException.class,
+            ReEnteredPasswordNotEqual.class})
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception ex, HttpServletRequest request) {
 
             return ResponseEntity.badRequest().body(
