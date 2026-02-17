@@ -4,5 +4,6 @@ public class RouteAppConstant {
 
     public final static String TREE_TYPE = "/tree-type";
     public final static String ROLES = "/roles";
+    public final static String AUTH = "/auth";
 
 }
