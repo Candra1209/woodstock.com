@@ -1,16 +1,15 @@
 package com.woodstock.app.repositorty;
 
+import com.woodstock.app.entity.Jobs;
+import com.woodstock.app.entity.JobsEnum;
 import com.woodstock.app.entity.RoleEnum;
 import com.woodstock.app.entity.Roles;
-import com.woodstock.app.entity.TreeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RolesRepositoryInterface extends JpaRepository<Roles, UUID>, JpaSpecificationExecutor<Roles> {
-
-    Optional<Roles> findByName(RoleEnum name);
+public interface JobsRepository extends JpaRepository<Jobs, UUID>, JpaSpecificationExecutor<Jobs> {
+    Optional<Jobs> findByName(JobsEnum jobsEnum);
 }

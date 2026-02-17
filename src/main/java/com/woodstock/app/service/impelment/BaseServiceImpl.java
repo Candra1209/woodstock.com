@@ -22,7 +22,7 @@ public abstract class BaseServiceImpl<
         T extends JpaRepository<R , UUID> & JpaSpecificationExecutor<R>,
         R > implements BaseEntityService<T, R> {
 
-    private final T repository;
+    protected final T repository;
     private final EntityManager entityManager;
 
 

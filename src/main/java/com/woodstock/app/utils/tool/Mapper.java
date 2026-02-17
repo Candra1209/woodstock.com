@@ -22,7 +22,7 @@ public class Mapper<T> {
 
     public Roles toEntity(RolesRequest request){
         return Roles.builder()
-                .role(RoleEnum.valueOf(request.getName()))
+                .name(RoleEnum.valueOf(request.getName()))
                 .build();
     }
 

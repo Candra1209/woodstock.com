@@ -1,6 +1,5 @@
 package com.woodstock.app.entity;
 
-import com.woodstock.app.models.response.roles.RolesResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +10,12 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.UUID;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "jobs")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Roles {
+public class Jobs {
 
     @Id
     @GeneratedValue
@@ -25,13 +24,6 @@ public class Roles {
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private RoleEnum name;
+    private JobsEnum name;
 
-
-    public RolesResponse toResponse(){
-        return RolesResponse.builder()
-                .id(id)
-                .name(name.toString())
-                .build();
-    }
 }
