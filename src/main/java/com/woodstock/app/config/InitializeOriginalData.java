@@ -1,9 +1,7 @@
-package com.woodstock.app.config.exception_handler;
+package com.woodstock.app.config;
 
-import com.woodstock.app.entity.Jobs;
-import com.woodstock.app.entity.JobsEnum;
-import com.woodstock.app.entity.RoleEnum;
-import com.woodstock.app.entity.Roles;
+import com.woodstock.app.entity.*;
+import com.woodstock.app.service.impelment.AccountServiceImpl;
 import com.woodstock.app.service.impelment.JobsServiceImpl;
 import com.woodstock.app.service.impelment.RoleServiceImpl;
 import jakarta.annotation.PostConstruct;
@@ -12,22 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Set;
+
 @Component
 public class InitializeOriginalData {
 
     private final RoleServiceImpl roleService;
     private final JobsServiceImpl jobsService;
+    private final AccountServiceImpl accountService;
 
     @Autowired
-    public InitializeOriginalData(RoleServiceImpl roleService, JobsServiceImpl jobsService) {
+    public InitializeOriginalData(RoleServiceImpl roleService, JobsServiceImpl jobsService, AccountServiceImpl accountService) {
         this.roleService = roleService;
         this.jobsService = jobsService;
+        this.accountService = accountService;
     }
 
     @PostConstruct
     public void init(){
 
-    createRoleIfNotExists(RoleEnum.ROLE_ADMIN);
+    Roles adminRole = createRoleIfNotExists(RoleEnum.ROLE_ADMIN);
     createRoleIfNotExists(RoleEnum.ROLE_USER);
     createRoleIfNotExists(RoleEnum.ROLE_GUEST);
 
@@ -35,6 +37,19 @@ public class InitializeOriginalData {
     createJobIfNotExists(JobsEnum.FALLER);
     createJobIfNotExists(JobsEnum.BUCKER);
     createJobIfNotExists(JobsEnum.OPERATOR);
+
+    accountService.findByUsernameOptional("admin")
+            .orElseGet(
+                () -> {
+
+                    Account newAccount = new Account();
+                    newAccount.setUsername("admin");
+                    newAccount.setPassword("admin");
+                    newAccount.setRoles(Set.of(adminRole));
+
+                    return accountService.save(newAccount);
+                }
+            );
 
     }
 

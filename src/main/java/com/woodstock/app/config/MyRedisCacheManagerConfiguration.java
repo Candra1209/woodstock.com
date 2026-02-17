@@ -1,4 +1,4 @@
-package com.woodstock.app.config.exception_handler;
+package com.woodstock.app.config;
 
 import org.springframework.boot.cache.autoconfigure.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;

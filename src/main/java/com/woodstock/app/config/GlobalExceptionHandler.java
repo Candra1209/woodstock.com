@@ -1,6 +1,7 @@
-package com.woodstock.app.config.exception_handler;
+package com.woodstock.app.config;
 
 import com.woodstock.app.models.response.ErrorResponse;
+import com.woodstock.app.utils.exception.AccountUserNotFound;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +27,20 @@ public class GlobalExceptionHandler {
                             .message("BAD REQUEST : " + ex.getMessage())
                             .build()
             );
+    }
+
+    @ExceptionHandler({
+            AccountUserNotFound.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFoundException(Exception ex, HttpServletRequest request) {
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponse.builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .url(UrlBuilderHelper.getFullUrl(request))
+                        .message("NOT FOUND : " + ex.getMessage())
+                        .build()
+        );
     }
 
     @ExceptionHandler(Exception.class)

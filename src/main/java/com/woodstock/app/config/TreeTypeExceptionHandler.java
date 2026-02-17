@@ -1,4 +1,4 @@
-package com.woodstock.app.config.exception_handler;
+package com.woodstock.app.config;
 
 import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.exception.CannotFoundTreeType;
