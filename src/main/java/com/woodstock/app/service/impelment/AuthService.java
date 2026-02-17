@@ -6,6 +6,8 @@ import com.woodstock.app.entity.Roles;
 import com.woodstock.app.models.response.auth.LoginResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import com.woodstock.app.security.jwt.JwtUtils;
+import com.woodstock.app.utils.exception.UsernameAlreadyExists;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,14 +34,17 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+    @Transactional
     public LoginResponse login(String username, String password) {
 
+        log.info("processing authentication");
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                     username, password
             )
         );
 
+        log.info("generate jwt token");
         String accessToken = jwtUtils.generateToken(authentication);
 
         return LoginResponse.builder()
@@ -47,10 +52,17 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
     public RegisterResponse registser(String username, String password){
+
 
         Roles roleUser = roleService.findByName(RoleEnum.ROLE_USER);
 
+        if (accountService.isUsernameExists(username)){
+            throw new UsernameAlreadyExists("username already exists");
+        }
+
+        log.info("save new account to database");
         Account newAccount = accountService.save(
                 Account.builder()
                         .username(username)

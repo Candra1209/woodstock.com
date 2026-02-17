@@ -4,6 +4,7 @@ import com.woodstock.app.entity.Account;
 import com.woodstock.app.repositorty.AccountRepositoryInterface;
 import com.woodstock.app.utils.exception.AccountUserNotFound;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class AccountServiceImpl extends BaseServiceImpl<AccountRepositoryInterface, Account> {
 
     private final PasswordEncoder encoder;
@@ -41,5 +43,12 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepositoryInterfa
         account.setPassword(encoder.encode(account.getPassword()));
 
         return super.save(account);
+    }
+
+    public Boolean isUsernameExists(String username){
+
+        log.info("check if username already exists");
+        return repository.existsByUsername(username);
+
     }
 }

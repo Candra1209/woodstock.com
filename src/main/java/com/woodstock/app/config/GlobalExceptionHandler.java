@@ -3,6 +3,7 @@ package com.woodstock.app.config;
 import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.exception.AccountUserNotFound;
 import com.woodstock.app.utils.exception.ReEnteredPasswordNotEqual;
+import com.woodstock.app.utils.exception.UsernameAlreadyExists;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -36,11 +37,25 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(Exception ex, HttpServletRequest request) {
 
-        return ResponseEntity.badRequest().body(
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 ErrorResponse.builder()
                         .status(HttpStatus.NOT_FOUND.value())
                         .url(UrlBuilderHelper.getFullUrl(request))
                         .message("NOT FOUND : " + ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler({
+            UsernameAlreadyExists.class
+    })
+    public ResponseEntity<ErrorResponse> handleConflictException(Exception ex, HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ErrorResponse.builder()
+                        .status(HttpStatus.CONFLICT.value())
+                        .url(UrlBuilderHelper.getFullUrl(request))
+                        .message("CONFLICT : " + ex.getMessage())
                         .build()
         );
     }
