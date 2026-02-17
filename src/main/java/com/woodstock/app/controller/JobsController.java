@@ -7,6 +7,7 @@ import com.woodstock.app.utils.constants.RouteAppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +22,7 @@ public class JobsController {
         this.jobsService = jobsService;
     }
 
+    @GetMapping("/all")
     public ResponseEntity<SuccessResponse<?>> getAlljob(){
 
         SuccessResponse<?> result = SuccessResponse.builder()

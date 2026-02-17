@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> {
                     auth.requestMatchers("/v1/auth/**").permitAll()
                             .requestMatchers("/error").permitAll()
-                            .requestMatchers("/v1/account").permitAll() //delete after finish
+                            .requestMatchers("/v1/jobs/**").permitAll() //delete after finish
                             .anyRequest().authenticated();
                 });
 
