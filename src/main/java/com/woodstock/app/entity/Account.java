@@ -37,9 +37,4 @@ public class Account extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Roles> roles = new HashSet<>();
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "account_jobs",
-//            joinColumns = @JoinColumn(name = "account_id"),
-//            inverseJoinColumns = @JoinColumn(name = "job_id"))
-//    private Set<Jobs> jobs = new HashSet<>();
 }

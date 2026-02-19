@@ -1,8 +1,10 @@
 package com.woodstock.app.service.impelment;
 
 import com.woodstock.app.entity.Account;
+import com.woodstock.app.entity.AccountInfo;
 import com.woodstock.app.entity.RoleEnum;
 import com.woodstock.app.entity.Roles;
+import com.woodstock.app.models.request.auth.RegisterRequest;
 import com.woodstock.app.models.response.auth.LoginResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import com.woodstock.app.security.jwt.JwtUtils;
@@ -23,13 +25,15 @@ public class AuthService {
 
     private final JwtUtils jwtUtils;
     private final AccountServiceImpl accountService;
+    private final AccountInfoServiceImpl accountInfoService;
     private final RoleServiceImpl roleService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthService(JwtUtils jwtUtils, AccountServiceImpl accountService, RoleServiceImpl roleService, AuthenticationManager authenticationManager) {
+    public AuthService(JwtUtils jwtUtils, AccountServiceImpl accountService, AccountInfoServiceImpl accountInfoService, RoleServiceImpl roleService, AuthenticationManager authenticationManager) {
         this.jwtUtils = jwtUtils;
         this.accountService = accountService;
+        this.accountInfoService = accountInfoService;
         this.roleService = roleService;
         this.authenticationManager = authenticationManager;
     }
@@ -55,8 +59,41 @@ public class AuthService {
     @Transactional
     public RegisterResponse registser(String username, String password){
 
-
+        log.info("try get User role from database");
         Roles roleUser = roleService.findByName(RoleEnum.ROLE_USER);
+
+        log.info("checking if username already exists");
+        if (accountService.isUsernameExists(username)){
+            log.error("username already exists : {}", username);
+            throw new UsernameAlreadyExists("username already exists");
+        }
+
+        log.info("save new account to database");
+        Account newAccount = accountService.save(
+                Account.builder()
+                        .username(username)
+                        .password(password)
+                        .roles(Set.of(roleUser))
+                        .build()
+        );
+
+        createDummyAccountInfo(newAccount);
+
+        return RegisterResponse.builder()
+                .username(newAccount.getUsername())
+                .CreatedAt(newAccount.getCreateAt())
+                .build();
+    }
+
+    @Transactional
+    public RegisterResponse registser(String username, String password, RoleEnum roleEnum){
+
+        log.info("checking if user try create account with role admin : {}", roleEnum.toString());
+        if (roleEnum.equals(RoleEnum.ROLE_ADMIN)){
+            throw new RuntimeException("you cannot make account with admin role");
+        }
+
+        Roles roleUser = roleService.findByName(roleEnum);
 
         if (accountService.isUsernameExists(username)){
             throw new UsernameAlreadyExists("username already exists");
@@ -71,9 +108,24 @@ public class AuthService {
                         .build()
         );
 
+        createDummyAccountInfo(newAccount);
+
         return RegisterResponse.builder()
                 .username(newAccount.getUsername())
                 .CreatedAt(newAccount.getCreateAt())
                 .build();
+    }
+
+
+    private void createDummyAccountInfo(Account newAccount) {
+        log.info("create dummy account info for {}", newAccount.getId());
+        AccountInfo accountInfo = AccountInfo.builder()
+                .fullname("user-"+ newAccount.getId())
+                .account(newAccount)
+                .jobs(Set.of())
+                .build();
+
+        log.info("save {} as dummy account info ,make sure to update it", accountInfo.getFullname());
+        accountInfoService.save(accountInfo);
     }
 }

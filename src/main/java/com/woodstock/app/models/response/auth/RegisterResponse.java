@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +17,10 @@ import java.time.LocalDateTime;
 public class RegisterResponse {
 
     private String username;
+    private String fullname;
+    private String contact;
+    private String email;
+    private List<String> jobs;
 
     @JsonProperty("created_at")
     private LocalDateTime CreatedAt;
