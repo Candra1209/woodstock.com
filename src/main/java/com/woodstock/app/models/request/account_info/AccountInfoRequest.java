@@ -14,6 +14,5 @@ public class AccountInfoRequest {
     private String fullname;
     private String email;
     private String contact;
-    private String job;
 
 }

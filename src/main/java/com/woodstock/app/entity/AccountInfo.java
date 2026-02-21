@@ -1,5 +1,6 @@
 package com.woodstock.app.entity;
 
+import com.woodstock.app.models.response.account_info.AccountInfoResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,18 @@ public class AccountInfo {
                 .jobs(jobs.stream().map(job -> job.getName().toString()).toList())
                 .build();
 
+    }
+
+    public AccountInfoResponse toResponse(){
+        return AccountInfoResponse.builder()
+                .id(id)
+                .username(account.getUsername())
+                .fullname(fullname)
+                .contact(contact)
+                .email(email)
+                .jobs(jobs.stream().map(job -> job.getName().toString()).toList())
+                .roles(account.getRoles().stream().map(roles -> roles.getName().toString()).toList())
+                .build();
     }
 
 

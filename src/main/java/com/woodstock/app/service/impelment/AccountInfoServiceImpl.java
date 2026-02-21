@@ -2,17 +2,16 @@ package com.woodstock.app.service.impelment;
 
 import com.woodstock.app.entity.Account;
 import com.woodstock.app.entity.AccountInfo;
-import com.woodstock.app.entity.BaseEntity;
 import com.woodstock.app.models.request.account_info.AccountInfoRequest;
 import com.woodstock.app.repositorty.AccountInfoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.UUID;
+
 
 @Service
 @Slf4j
@@ -54,5 +53,50 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
         log.info("update account info di database");
         return repository.save(accountInfo);
     }
+
+    @Transactional
+    public AccountInfo updateOwnInfo(AccountInfoRequest request, String username){
+
+        log.info("try find account with username {}", username);
+        Account account = accountService.findByUsername(username);
+
+        log.info("try find account information with username {}", username);
+        AccountInfo accountInfo = repository.findByAccount(account)
+                .orElseThrow(
+                        () -> {
+                            log.error("there no account information with account : {}", account.getUsername());
+                            return new RuntimeException("there no account info with account  : " + account.getUsername());
+                        }
+                );
+
+        return updatedAndGetAccountInfo(accountInfo, request);
+
+    }
+
+    @Transactional
+    public AccountInfo updateUserInfo(AccountInfoRequest request, UUID id){
+
+        log.info("try find account with id {}", id.toString());
+        AccountInfo account = findbyId(id);
+
+        return updatedAndGetAccountInfo(account, request);
+
+    }
+
+    private @NonNull AccountInfo updatedAndGetAccountInfo(AccountInfo accountInfo, AccountInfoRequest request) {
+        AccountInfo updatedAccountinfo = AccountInfo.builder()
+                .id(accountInfo.getId())
+                .fullname(request.getFullname())
+                .email(request.getEmail())
+                .contact(request.getContact())
+                .account(accountInfo.getAccount())
+                .jobs(accountInfo.getJobs())
+                .build();
+
+        log.info("account {} had been updated", accountInfo.getAccount().getUsername());
+        return save(updatedAccountinfo);
+    }
+
+
 
 }
