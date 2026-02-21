@@ -77,10 +77,11 @@ public class AuthService {
                         .build()
         );
 
-        createDummyAccountInfo(newAccount);
+        AccountInfo accountInfo = createDummyAccountInfo(newAccount);
 
         return RegisterResponse.builder()
                 .username(newAccount.getUsername())
+                .fullname(accountInfo.getFullname())
                 .CreatedAt(newAccount.getCreateAt())
                 .build();
     }
@@ -108,16 +109,17 @@ public class AuthService {
                         .build()
         );
 
-        createDummyAccountInfo(newAccount);
+        AccountInfo accountInfo = createDummyAccountInfo(newAccount);
 
         return RegisterResponse.builder()
                 .username(newAccount.getUsername())
+                .fullname(accountInfo.getFullname())
                 .CreatedAt(newAccount.getCreateAt())
                 .build();
     }
 
 
-    private void createDummyAccountInfo(Account newAccount) {
+    private AccountInfo createDummyAccountInfo(Account newAccount) {
         log.info("create dummy account info for {}", newAccount.getId());
         AccountInfo accountInfo = AccountInfo.builder()
                 .fullname("user-"+ newAccount.getId())
@@ -126,6 +128,6 @@ public class AuthService {
                 .build();
 
         log.info("save {} as dummy account info ,make sure to update it", accountInfo.getFullname());
-        accountInfoService.save(accountInfo);
+        return accountInfoService.save(accountInfo);
     }
 }

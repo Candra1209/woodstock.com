@@ -1,6 +1,8 @@
 package com.woodstock.app.config;
 
 import com.woodstock.app.security.jwt.JwtFilter;
+import com.woodstock.app.utils.constants.RouteAppConstant;
+import io.lettuce.core.output.ReplayOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +37,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests( auth -> {
-                    auth.requestMatchers("/v1/auth/**").permitAll()
+                    auth.requestMatchers(RouteAppConstant.BASE_V1 + RouteAppConstant.AUTH + "/**").permitAll()
                             .requestMatchers("/error").permitAll()
                             .requestMatchers("/v1/jobs/**").permitAll() //delete after finish
                             .anyRequest().authenticated();

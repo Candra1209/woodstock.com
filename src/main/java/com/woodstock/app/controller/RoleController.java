@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1"+ RouteAppConstant.ROLES)
+@RequestMapping(RouteAppConstant.BASE_V1 + RouteAppConstant.ROLES)
 public class RoleController {
 
     private final RoleServiceImpl roleService;
