@@ -14,7 +14,10 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -60,6 +63,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 ErrorResponse.builder()
                         .status(HttpStatus.CONFLICT.value())
+                        .url(UrlBuilderHelper.getFullUrl(request))
+                        .message("CONFLICT : " + ex.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler({
+            AuthorizationDeniedException.class
+    })
+    public ResponseEntity<ErrorResponse> handleForbiden(Exception ex, HttpServletRequest request) {
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                ErrorResponse.builder()
+                        .status(HttpStatus.FORBIDDEN.value())
                         .url(UrlBuilderHelper.getFullUrl(request))
                         .message("CONFLICT : " + ex.getMessage())
                         .build()

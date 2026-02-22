@@ -1,13 +1,24 @@
 package com.woodstock.app.controller;
-import com.woodstock.app.entity.Jobs;
+
+import com.woodstock.app.entity.AccountInfo;
+import com.woodstock.app.models.params.AccountInfoSearch;
+import com.woodstock.app.models.params.PageParams;
+import com.woodstock.app.models.params.SortParams;
 import com.woodstock.app.models.request.account_info.AccountInfoRequest;
 import com.woodstock.app.models.request.jobs.JobsRequest;
+import com.woodstock.app.models.response.PagingResponse;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.account_info.AccountInfoResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import com.woodstock.app.service.impelment.AccountInfoServiceImpl;
+import com.woodstock.app.specification.AccountInfoSpecification;
 import com.woodstock.app.utils.constants.RouteAppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +36,43 @@ public class AccountInfoController {
     @Autowired
     public AccountInfoController(AccountInfoServiceImpl accountInfoService) {
         this.accountInfoService = accountInfoService;
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SuccessResponse<PagingResponse<AccountInfoResponse>>> getAllAccount(
+            @ModelAttribute PageParams pageParams,
+            @ModelAttribute SortParams sortParams,
+            @ModelAttribute AccountInfoSearch search
+            ) {
+
+        int pageConfig = Math.max(pageParams.getPage()-1, 0);
+
+        System.out.println(search.getJobs());
+
+        Sort sort = Sort.by(Sort.Direction.fromString(sortParams.getOrder()), sortParams.getFilter());
+
+        Pageable pageable = PageRequest.of(pageConfig, pageParams.getSize(), sort);
+
+        Specification<AccountInfo> specification = AccountInfoSpecification.getSpecification(search);
+
+        Page<AccountInfoResponse> page = accountInfoService.getPagging(pageable, specification).map(AccountInfo::toResponse);
+
+        PagingResponse<AccountInfoResponse> paging = PagingResponse.<AccountInfoResponse>builder()
+                .content(page.getContent())
+                .page(pageParams.getPage())
+                .size(page.getSize())
+                .totalPage(page.getTotalPages())
+                .totalData(page.getTotalElements())
+                .build();
+
+        SuccessResponse<PagingResponse<AccountInfoResponse>> result = SuccessResponse.<PagingResponse<AccountInfoResponse>>builder()
+                .status(HttpStatus.FOUND)
+                .message("success get all account information from database")
+                .data(paging)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(result);
     }
 
     @GetMapping("/{id}")

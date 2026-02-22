@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountInfo {
+public class AccountInfo extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -51,6 +51,8 @@ public class AccountInfo {
                 .contact(contact)
                 .email(email)
                 .jobs(jobs.stream().map(job -> job.getName().toString()).toList())
+                .createdAt(getCreateAt())
+                .updatedAt(getUpdateAt())
                 .build();
 
     }
@@ -64,6 +66,8 @@ public class AccountInfo {
                 .email(email)
                 .jobs(jobs.stream().map(job -> job.getName().toString()).toList())
                 .roles(account.getRoles().stream().map(roles -> roles.getName().toString()).toList())
+                .createdAt(getCreateAt())
+                .updatedAt(getUpdateAt())
                 .build();
     }
 

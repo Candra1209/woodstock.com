@@ -81,7 +81,7 @@ public class AuthService {
         return RegisterResponse.builder()
                 .username(newAccount.getUsername())
                 .fullname(accountInfo.getFullname())
-                .CreatedAt(newAccount.getCreateAt())
+                .createdAt(newAccount.getCreateAt())
                 .build();
     }
 
@@ -113,7 +113,7 @@ public class AuthService {
         return RegisterResponse.builder()
                 .username(newAccount.getUsername())
                 .fullname(accountInfo.getFullname())
-                .CreatedAt(newAccount.getCreateAt())
+                .createdAt(newAccount.getCreateAt())
                 .build();
     }
 
