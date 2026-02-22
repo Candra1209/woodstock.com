@@ -1,18 +1,15 @@
 package com.woodstock.app.service.impelment;
 
-import com.woodstock.app.entity.TreeType;
 import com.woodstock.app.service.interfaces.BaseEntityService;
-import com.woodstock.app.utils.exception.CannotFoundTreeType;
+import com.woodstock.app.utils.exception.tree_type.TreeTypeNotFoundException;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +30,7 @@ public abstract class BaseServiceImpl<
 
     @Override
     public R save(R r) {
+        log.info("save new record to database");
         return repository.save(r);
     }
 
@@ -47,7 +45,7 @@ public abstract class BaseServiceImpl<
         log.info("try find record by id from database");
         return repository.findById(id)
                 .orElseThrow(
-                        () -> new CannotFoundTreeType("there no tree type with required id : " + id)
+                        () -> new TreeTypeNotFoundException("there no record with required id : " + id)
                 );
     }
 
@@ -58,9 +56,9 @@ public abstract class BaseServiceImpl<
 
     @Override
     public R delete(UUID id) {
-        log.info("delete record by id");
+        log.info("try find data from by his id" );
         R r = findbyId(id);
-        delete(r);
+        repository.delete(r);
 
         return r;
     }

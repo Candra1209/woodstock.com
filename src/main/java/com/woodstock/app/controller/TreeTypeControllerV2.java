@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/v2"+RouteAppConstant.TREE_TYPE)
+@RequestMapping(RouteAppConstant.BASE_V2+RouteAppConstant.TREE_TYPE)
 public class TreeTypeControllerV2 {
 
     private final TreeTypeServiceV2 treeTypeServiceV2;

@@ -11,15 +11,5 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  redis:
-    container_name: woodstock_redis
-    image: 'redis:alpine'
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
 volumes:
   pgdata:
-  redis_data:

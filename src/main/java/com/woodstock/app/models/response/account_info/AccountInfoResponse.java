@@ -1,4 +1,4 @@
-package com.woodstock.app.models.response.auth;
+package com.woodstock.app.models.response.account_info;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -14,13 +14,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterResponse {
-
+public class AccountInfoResponse {
+    private UUID id;
     private String username;
     private String fullname;
     private String contact;
     private String email;
     private List<String> jobs;
+    private List<String> roles;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

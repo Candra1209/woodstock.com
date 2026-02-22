@@ -21,8 +21,6 @@ public class JobsServiceImpl extends BaseServiceImpl<JobsRepository, Jobs>{
         super(repository, entityManager);
     }
 
-
-
     public Optional<Jobs> findByNameOptional(JobsEnum jobsEnum){
 
         log.info("Get job by it name");

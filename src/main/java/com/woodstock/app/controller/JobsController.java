@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-@RequestMapping("/v1"+ RouteAppConstant.JOBS)
+@RequestMapping(RouteAppConstant.BASE_V1 + RouteAppConstant.JOBS)
 public class JobsController {
 
     private final JobsServiceImpl jobsService;

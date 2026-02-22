@@ -5,7 +5,7 @@ import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.service.impelment.TreeTypeService;
 import com.woodstock.app.utils.constants.RouteAppConstant;
-import com.woodstock.app.utils.exception.InvalidQueryParameter;
+import com.woodstock.app.utils.exception.global.InvalidQueryParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1"+RouteAppConstant.TREE_TYPE)
+@RequestMapping(RouteAppConstant.BASE_V1+RouteAppConstant.TREE_TYPE)
 public class TreeTypeController {
 
     @Autowired
@@ -61,7 +61,7 @@ public class TreeTypeController {
                 Page<TreeTypeResponse> paged = service.getAllWithDeleted(pageable);
                 return assembler.toModel(paged);
             }
-            default -> throw new InvalidQueryParameter("invalid status type for get all tree type : use either 'active', 'deleted', or 'all'");
+            default -> throw new InvalidQueryParameterException("invalid status type for get all tree type : use either 'active', 'deleted', or 'all'");
         }
     }
 
