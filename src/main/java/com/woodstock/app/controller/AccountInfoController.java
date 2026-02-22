@@ -4,6 +4,8 @@ import com.woodstock.app.entity.Account;
 import com.woodstock.app.entity.AccountInfo;
 import com.woodstock.app.models.request.account_info.AccountInfoRequest;
 import com.woodstock.app.models.response.SuccessResponse;
+import com.woodstock.app.models.response.account_info.AccountInfoResponse;
+import com.woodstock.app.models.response.auth.RegisterResponse;
 import com.woodstock.app.service.impelment.AccountInfoServiceImpl;
 import com.woodstock.app.utils.constants.RouteAppConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,9 @@ public class AccountInfoController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<SuccessResponse<?>> getAccountInfoById(@PathVariable String id){
+    public ResponseEntity<SuccessResponse<RegisterResponse>> getAccountInfoById(@PathVariable String id){
 
-        SuccessResponse<?> result = SuccessResponse.builder()
+        SuccessResponse<RegisterResponse> result = SuccessResponse.<RegisterResponse>builder()
                 .status(HttpStatus.FOUND)
                 .message("success find account by id")
                 .data(accountInfoService.findbyId(UUID.fromString(id)).toRegisterResponse())
@@ -41,9 +43,9 @@ public class AccountInfoController {
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('USER')")
-    public ResponseEntity<SuccessResponse<?>> getAccountInfoById(Authentication authentication){
+    public ResponseEntity<SuccessResponse<RegisterResponse>> getAccountInfoById(Authentication authentication){
 
-        SuccessResponse<?> result = SuccessResponse.builder()
+        SuccessResponse<RegisterResponse> result = SuccessResponse.<RegisterResponse>builder()
                 .status(HttpStatus.FOUND)
                 .message("success find account by id")
                 .data(accountInfoService.getAccountInfoByAccountUsername(authentication.getName()).toRegisterResponse())
@@ -54,9 +56,9 @@ public class AccountInfoController {
 
     @PutMapping("/me/update")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<SuccessResponse<?>> updateOwnInfo(@RequestBody AccountInfoRequest request, Authentication authentication){
+    public ResponseEntity<SuccessResponse<AccountInfoResponse>> updateOwnInfo(@RequestBody AccountInfoRequest request, Authentication authentication){
 
-        SuccessResponse<?> result = SuccessResponse.builder()
+        SuccessResponse<AccountInfoResponse> result = SuccessResponse.<AccountInfoResponse>builder()
                 .status(HttpStatus.CREATED)
                 .message("your account info successfully updated")
                 .data(accountInfoService.updateOwnInfo(request, authentication.getName()).toResponse())
@@ -66,14 +68,28 @@ public class AccountInfoController {
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<SuccessResponse<?>> updateInfobyAdmin(@PathVariable String id, @RequestBody AccountInfoRequest request){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SuccessResponse<AccountInfoResponse>> updateInfobyAdmin(@PathVariable String id, @RequestBody AccountInfoRequest request){
 
-        SuccessResponse<?> result = SuccessResponse.builder()
+        SuccessResponse<AccountInfoResponse> result = SuccessResponse.<AccountInfoResponse>builder()
                 .status(HttpStatus.CREATED)
                 .message("success updated account info for user id : " + id)
                 .data(accountInfoService.updateUserInfo(request, UUID.fromString(id)).toResponse())
                 .build();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @DeleteMapping("{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<SuccessResponse<AccountInfoResponse>> deleteAccountByAdmin(@PathVariable String id){
+
+        SuccessResponse<AccountInfoResponse> result = SuccessResponse.<AccountInfoResponse>builder()
+                .status(HttpStatus.OK)
+                .message("success deleted account info with info id : " + id)
+                .data(accountInfoService.deleteAccountAndInfo(UUID.fromString(id)).toResponse())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

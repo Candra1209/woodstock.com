@@ -47,7 +47,7 @@ public abstract class BaseServiceImpl<
         log.info("try find record by id from database");
         return repository.findById(id)
                 .orElseThrow(
-                        () -> new CannotFoundTreeType("there no tree type with required id : " + id)
+                        () -> new CannotFoundTreeType("there no record with required id : " + id)
                 );
     }
 
@@ -58,9 +58,9 @@ public abstract class BaseServiceImpl<
 
     @Override
     public R delete(UUID id) {
-        log.info("delete record by id");
+        log.info("try find data from by his id" );
         R r = findbyId(id);
-        delete(r);
+        repository.delete(r);
 
         return r;
     }

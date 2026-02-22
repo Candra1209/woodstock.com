@@ -83,6 +83,20 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
 
     }
 
+    @Transactional
+    public AccountInfo deleteAccountAndInfo(UUID id){
+
+        AccountInfo accountInfo = findbyId(id);
+        Account account = accountInfo.getAccount();
+
+        log.info("try deleting account and account info");
+        delete(accountInfo);
+        accountService.delete(account);
+
+        return accountInfo;
+
+    }
+
     private @NonNull AccountInfo updatedAndGetAccountInfo(AccountInfo accountInfo, AccountInfoRequest request) {
         AccountInfo updatedAccountinfo = AccountInfo.builder()
                 .id(accountInfo.getId())
