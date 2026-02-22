@@ -4,11 +4,10 @@ import com.woodstock.app.entity.Account;
 import com.woodstock.app.entity.AccountInfo;
 import com.woodstock.app.entity.RoleEnum;
 import com.woodstock.app.entity.Roles;
-import com.woodstock.app.models.request.auth.RegisterRequest;
 import com.woodstock.app.models.response.auth.LoginResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import com.woodstock.app.security.jwt.JwtUtils;
-import com.woodstock.app.utils.exception.UsernameAlreadyExists;
+import com.woodstock.app.utils.exception.auth.UsernameAlreadyExistsException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +64,7 @@ public class AuthService {
         log.info("checking if username already exists");
         if (accountService.isUsernameExists(username)){
             log.error("username already exists : {}", username);
-            throw new UsernameAlreadyExists("username already exists");
+            throw new UsernameAlreadyExistsException("username already exists");
         }
 
         log.info("save new account to database");
@@ -97,7 +96,7 @@ public class AuthService {
         Roles roleUser = roleService.findByName(roleEnum);
 
         if (accountService.isUsernameExists(username)){
-            throw new UsernameAlreadyExists("username already exists");
+            throw new UsernameAlreadyExistsException("username already exists");
         }
 
         log.info("save new account to database");

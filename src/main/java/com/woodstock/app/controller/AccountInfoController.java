@@ -1,8 +1,7 @@
 package com.woodstock.app.controller;
-
-import com.woodstock.app.entity.Account;
-import com.woodstock.app.entity.AccountInfo;
+import com.woodstock.app.entity.Jobs;
 import com.woodstock.app.models.request.account_info.AccountInfoRequest;
+import com.woodstock.app.models.request.jobs.JobsRequest;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.models.response.account_info.AccountInfoResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
@@ -91,5 +90,18 @@ public class AccountInfoController {
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PutMapping("/me/assign")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<SuccessResponse<AccountInfoResponse>> assignJobYourself(@RequestBody JobsRequest request, Authentication authentication){
+
+        SuccessResponse<AccountInfoResponse> result = SuccessResponse.<AccountInfoResponse>builder()
+                .status(HttpStatus.CREATED)
+                .message("success assign new job to account info with info id : " + authentication.getName())
+                .data(accountInfoService.assignWonJob(authentication.getName(), request.getJob()).toResponse())
+                .build();
+
+        return ResponseEntity.ok(result);
     }
 }

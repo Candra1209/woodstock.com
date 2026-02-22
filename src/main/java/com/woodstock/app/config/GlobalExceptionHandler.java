@@ -1,9 +1,12 @@
 package com.woodstock.app.config;
 
 import com.woodstock.app.models.response.ErrorResponse;
-import com.woodstock.app.utils.exception.AccountUserNotFound;
-import com.woodstock.app.utils.exception.ReEnteredPasswordNotEqual;
-import com.woodstock.app.utils.exception.UsernameAlreadyExists;
+import com.woodstock.app.utils.exception.account.AccountUserNotFoundException;
+import com.woodstock.app.utils.exception.global.DataNotFoundException;
+import com.woodstock.app.utils.exception.jobs.JobsAlreadyAssignException;
+import com.woodstock.app.utils.exception.jobs.JobsNotFoundException;
+import com.woodstock.app.utils.exception.auth.ReEnteredPasswordNotEqualException;
+import com.woodstock.app.utils.exception.auth.UsernameAlreadyExistsException;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -12,7 +15,6 @@ import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class,
             InvalidDataAccessApiUsageException.class,
             PropertyReferenceException.class,
-            ReEnteredPasswordNotEqual.class})
+            ReEnteredPasswordNotEqualException.class})
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception ex, HttpServletRequest request) {
 
             return ResponseEntity.badRequest().body(
@@ -33,7 +35,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            AccountUserNotFound.class
+            AccountUserNotFoundException.class,
+            JobsNotFoundException.class,
+            DataNotFoundException.class
+
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(Exception ex, HttpServletRequest request) {
 
@@ -47,7 +52,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            UsernameAlreadyExists.class
+            UsernameAlreadyExistsException.class,
+            JobsAlreadyAssignException.class
     })
     public ResponseEntity<ErrorResponse> handleConflictException(Exception ex, HttpServletRequest request) {
 

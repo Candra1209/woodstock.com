@@ -5,7 +5,7 @@ import com.woodstock.app.models.request.tree_type.TreeTypeRequest;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.repositorty.TreeTypeRepositoryInterface;
 import com.woodstock.app.service.interfaces.ServiceInterface;
-import com.woodstock.app.utils.exception.CannotFoundTreeType;
+import com.woodstock.app.utils.exception.tree_type.TreeTypeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class TreeTypeService implements ServiceInterface<TreeTypeRequest, TreeTy
     @Override
     public TreeTypeResponse getById(UUID id) {
         return repository.findById(id).orElseThrow(
-                () -> new CannotFoundTreeType("there no tree type with ID : " + id)
+                () -> new TreeTypeNotFoundException("there no tree type with ID : " + id)
         ).toResponse();
     }
 

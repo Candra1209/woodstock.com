@@ -1,9 +1,11 @@
 package com.woodstock.app.service.impelment;
 
-import com.woodstock.app.entity.Account;
-import com.woodstock.app.entity.AccountInfo;
+import com.woodstock.app.entity.*;
 import com.woodstock.app.models.request.account_info.AccountInfoRequest;
 import com.woodstock.app.repositorty.AccountInfoRepository;
+import com.woodstock.app.utils.exception.account.AccountUserNotFoundException;
+import com.woodstock.app.utils.exception.jobs.JobsAlreadyAssignException;
+import com.woodstock.app.utils.exception.jobs.JobsNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,12 @@ import java.util.UUID;
 public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepository, AccountInfo> {
 
     private final AccountServiceImpl accountService;
+    private final JobsServiceImpl jobsService;
 
-    protected AccountInfoServiceImpl(AccountInfoRepository repository, EntityManager entityManager, AccountServiceImpl accountService) {
+    protected AccountInfoServiceImpl(AccountInfoRepository repository, EntityManager entityManager, AccountServiceImpl accountService, JobsServiceImpl jobsService) {
         super(repository, entityManager);
         this.accountService = accountService;
+        this.jobsService = jobsService;
     }
 
     public AccountInfo getAccountInfoByAccountUsername(String username){
@@ -30,7 +34,7 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
 
         return repository.findByAccount(account)
                 .orElseThrow(
-                        () -> new RuntimeException("there no account info with account id : " + account.getId())
+                        () -> new AccountUserNotFoundException("there no account info with account id : " + account.getId())
                 );
     }
 
@@ -42,7 +46,7 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
 
         AccountInfo accountInfo = repository.findByAccount(account)
                 .orElseThrow(
-                        () -> new RuntimeException("there no account info with account id : " + account.getId())
+                        () -> new AccountUserNotFoundException("there no account info with account id : " + account.getId())
                 );
 
         log.info("try updating account info");
@@ -65,7 +69,7 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
                 .orElseThrow(
                         () -> {
                             log.error("there no account information with account : {}", account.getUsername());
-                            return new RuntimeException("there no account info with account  : " + account.getUsername());
+                            return new AccountUserNotFoundException("there no account info with account  : " + account.getUsername());
                         }
                 );
 
@@ -94,6 +98,33 @@ public class AccountInfoServiceImpl extends BaseServiceImpl<AccountInfoRepositor
         accountService.delete(account);
 
         return accountInfo;
+
+    }
+
+    public AccountInfo assignWonJob(String username, String job){
+
+        log.info("checking if job input by user included in enum");
+        JobsEnum jobTarget = JobsEnum.valueOf(job.toUpperCase());
+
+        log.info("finding job enum in database");
+        Jobs newJob = jobsService.findByNameOptional(jobTarget)
+                .orElseThrow(
+                        () -> new JobsNotFoundException("there no job with type : " + jobTarget.toString())
+                );
+
+        log.info("finding account info in database");
+        AccountInfo accountInfo = getAccountInfoByAccountUsername(username);
+
+        log.info("checking if jobs already assign to {}", accountInfo.getAccount().getUsername());
+        if (accountInfo.getJobs().contains(newJob)){
+            log.info("job {} already assign to {}",newJob.getName().toString() , accountInfo.getAccount().getUsername());
+            throw new JobsAlreadyAssignException("you already assign as " + newJob.getName().toString());
+        }
+
+        log.info("assigning {} job to {} account info", newJob.getName().toString(), accountInfo.getAccount().getUsername());
+        accountInfo.getJobs().add(newJob);
+
+        return save(accountInfo);
 
     }
 

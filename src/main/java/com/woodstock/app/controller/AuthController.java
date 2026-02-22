@@ -5,7 +5,7 @@ import com.woodstock.app.models.request.auth.RegisterRequest;
 import com.woodstock.app.models.response.SuccessResponse;
 import com.woodstock.app.service.impelment.AuthService;
 import com.woodstock.app.utils.constants.RouteAppConstant;
-import com.woodstock.app.utils.exception.ReEnteredPasswordNotEqual;
+import com.woodstock.app.utils.exception.auth.ReEnteredPasswordNotEqualException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class AuthController {
     public ResponseEntity<SuccessResponse<?>> register(@RequestBody RegisterRequest request) {
 
         if (!request.getPassword().equals(request.getPassword_repeat())){
-            throw new ReEnteredPasswordNotEqual("password and repeated-password not same");
+            throw new ReEnteredPasswordNotEqualException("password and repeated-password not same");
         }
 
         SuccessResponse<?> result = SuccessResponse.builder()

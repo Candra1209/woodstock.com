@@ -2,17 +2,14 @@ package com.woodstock.app.service.impelment;
 
 import com.woodstock.app.entity.Account;
 import com.woodstock.app.repositorty.AccountRepositoryInterface;
-import com.woodstock.app.utils.exception.AccountUserNotFound;
+import com.woodstock.app.utils.exception.account.AccountUserNotFoundException;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
-import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -29,7 +26,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepositoryInterfa
     public Account findByUsername(String username){
         return repository.findByUsername(username)
                 .orElseThrow(
-                        () -> new AccountUserNotFound("there no account with username : " + username )
+                        () -> new AccountUserNotFoundException("there no account with username : " + username )
                 );
     }
 
