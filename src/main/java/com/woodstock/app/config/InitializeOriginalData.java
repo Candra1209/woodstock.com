@@ -21,17 +21,15 @@ public class InitializeOriginalData {
     private final JobsServiceImpl jobsService;
     private final AccountServiceImpl accountService;
     private final AccountInfoServiceImpl accountInfoService;
-    private final AuthService authService;
 
     private final AccountDataSeeder accountDataSeeder;
 
     @Autowired
-    public InitializeOriginalData(RoleServiceImpl roleService, JobsServiceImpl jobsService, AccountServiceImpl accountService, AccountInfoServiceImpl accountInfoService, AuthService authService, AccountDataSeeder accountDataSeeder) {
+    public InitializeOriginalData(RoleServiceImpl roleService, JobsServiceImpl jobsService, AccountServiceImpl accountService, AccountInfoServiceImpl accountInfoService, AccountDataSeeder accountDataSeeder) {
         this.roleService = roleService;
         this.jobsService = jobsService;
         this.accountService = accountService;
         this.accountInfoService = accountInfoService;
-        this.authService = authService;
         this.accountDataSeeder = accountDataSeeder;
     }
 
@@ -46,6 +44,7 @@ public class InitializeOriginalData {
         createJobIfNotExists(JobsEnum.FALLER);
         createJobIfNotExists(JobsEnum.BUCKER);
         createJobIfNotExists(JobsEnum.OPERATOR);
+        createJobIfNotExists(JobsEnum.GANISPH);
         createJobIfNotExists(JobsEnum.MANAGER_CAMP);
         createJobIfNotExists(JobsEnum.MANAGER_LOGPOND);
 
@@ -116,11 +115,8 @@ public class InitializeOriginalData {
             Set<Jobs> jobs = new HashSet<>();
 
             accountSeeder.jobs.forEach(s -> {
-
-                JobsEnum jobsEnum = JobsEnum.valueOf(s);
-
                 jobs.add(
-                        jobsService.findByNameOptional(jobsEnum)
+                        jobsService.findByNameOptional(s)
                                 .orElseThrow(
                                         () -> new JobsNotFoundException("there no jobs with name : " + s)
                                 )

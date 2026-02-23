@@ -1,5 +1,6 @@
 package com.woodstock.app.utils.seeder;
 
+import com.woodstock.app.entity.JobsEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ public class AccountDataSeeder {
         public String fullname;
         public String email;
         public String contact;
-        public List<String> jobs;
+        public List<JobsEnum> jobs;
 
-        public AccountSeeder(String username, String password, String fullname, String email, String contact, List<String> jobs) {
+        public AccountSeeder(String username, String password, String fullname, String email, String contact, List<JobsEnum> jobs) {
             this.username = username;
             this.password = password;
             this.fullname = fullname;
@@ -37,7 +38,7 @@ public class AccountDataSeeder {
                                 "Candra Irawan",
                                 "candraseka1209@gmail.com",
                                 "6285705092824",
-                                new ArrayList<>(List.of("SCALLER"))
+                                new ArrayList<>(List.of(JobsEnum.SCALLER))
                         ),
                         new AccountSeeder(
                                 "andika",
@@ -45,7 +46,7 @@ public class AccountDataSeeder {
                                 "Andika Saputra",
                                 "andika.saputra@gmail.com",
                                 "628123450001",
-                                new ArrayList<>(List.of("FALLER"))
+                                new ArrayList<>(List.of(JobsEnum.FALLER))
                         ),
                         new AccountSeeder(
                                 "bima",
@@ -53,7 +54,7 @@ public class AccountDataSeeder {
                                 "Bima Pratama",
                                 "bima.pratama@gmail.com",
                                 "628123450002",
-                                new ArrayList<>(List.of("BUCKER"))
+                                new ArrayList<>(List.of(JobsEnum.BUCKER))
                         ),
                         new AccountSeeder(
                                 "rizky",
@@ -61,7 +62,7 @@ public class AccountDataSeeder {
                                 "Rizky Maulana",
                                 "rizky.maulana@gmail.com",
                                 "628123450003",
-                                new ArrayList<>(List.of("OPERATOR"))
+                                new ArrayList<>(List.of(JobsEnum.OPERATOR))
                         ),
                         new AccountSeeder(
                                 "ferdi",
@@ -69,7 +70,7 @@ public class AccountDataSeeder {
                                 "Ferdiansyah",
                                 "ferdiansyah@gmail.com",
                                 "628123450004",
-                                new ArrayList<>(List.of("SCALLER", "FALLER"))
+                                new ArrayList<>(List.of(JobsEnum.SCALLER, JobsEnum.OPERATOR))
                         ),
                         new AccountSeeder(
                                 "yoga",
@@ -77,7 +78,7 @@ public class AccountDataSeeder {
                                 "Yoga Prasetyo",
                                 "yoga.prasetyo@gmail.com",
                                 "628123450005",
-                                new ArrayList<>(List.of("BUCKER", "OPERATOR"))
+                                new ArrayList<>(List.of(JobsEnum.BUCKER, JobsEnum.FALLER))
                         ),
                         new AccountSeeder(
                                 "rahmat",
@@ -85,7 +86,7 @@ public class AccountDataSeeder {
                                 "Rahmat Hidayat",
                                 "rahmat.hidayat@gmail.com",
                                 "628123450006",
-                                new ArrayList<>(List.of("MANAGER_LOGPOND"))
+                                new ArrayList<>(List.of(JobsEnum.MANAGER_LOGPOND))
                         ),
                         new AccountSeeder(
                                 "doni",
@@ -93,7 +94,7 @@ public class AccountDataSeeder {
                                 "Doni Setiawan",
                                 "doni.setiawan@gmail.com",
                                 "628123450007",
-                                new ArrayList<>(List.of("MANAGER_CAMP"))
+                                new ArrayList<>(List.of(JobsEnum.MANAGER_CAMP))
                         ),
                         new AccountSeeder(
                                 "fajar",
@@ -101,7 +102,7 @@ public class AccountDataSeeder {
                                 "Fajar Nugroho",
                                 "fajar.nugroho@gmail.com",
                                 "628123450008",
-                                new ArrayList<>(List.of("SCALLER", "BUCKER", "OPERATOR"))
+                                new ArrayList<>(List.of(JobsEnum.SCALLER, JobsEnum.GANISPH))
                         ),
                         new AccountSeeder(
                                 "aldi",
@@ -109,7 +110,7 @@ public class AccountDataSeeder {
                                 "Aldi Kurniawan",
                                 "aldi.kurniawan@gmail.com",
                                 "628123450009",
-                                new ArrayList<>(List.of("FALLER", "MANAGER_LOGPOND"))
+                                new ArrayList<>(List.of(JobsEnum.OPERATOR, JobsEnum.GANISPH, JobsEnum.MANAGER_LOGPOND))
                         )
                 )
         );
