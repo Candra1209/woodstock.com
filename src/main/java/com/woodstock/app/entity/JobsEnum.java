@@ -4,5 +4,7 @@ public enum JobsEnum {
     SCALLER,
     FALLER,
     BUCKER,
-    OPERATOR
+    OPERATOR,
+    MANAGER_LOGPOND,
+    MANAGER_CAMP
 }
