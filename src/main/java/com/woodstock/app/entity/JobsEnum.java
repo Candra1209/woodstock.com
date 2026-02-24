@@ -5,6 +5,7 @@ public enum JobsEnum {
     FALLER,
     BUCKER,
     OPERATOR,
+    GANISPH,
     MANAGER_LOGPOND,
     MANAGER_CAMP
 }
