@@ -48,8 +48,6 @@ public class AccountInfoController {
 
         int pageConfig = Math.max(pageParams.getPage()-1, 0);
 
-        System.out.println(search.getJobs());
-
         Sort sort = Sort.by(Sort.Direction.fromString(sortParams.getOrder()), sortParams.getFilter());
 
         Pageable pageable = PageRequest.of(pageConfig, pageParams.getSize(), sort);
