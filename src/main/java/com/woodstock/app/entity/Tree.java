@@ -1,6 +1,7 @@
 package com.woodstock.app.entity;
 
 import com.woodstock.app.models.response.tree.TreeMinResponse;
+import com.woodstock.app.models.response.tree.TreeResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -66,6 +67,21 @@ public class Tree {
                .avgDiameter(avgDiameter)
                .volume(volume)
                .build();
+    }
+
+    public TreeResponse toTreeResponse() {
+        return TreeResponse.builder()
+                .id(this.id)
+                .scaller(scaller.toResponse())
+                .faller(faller.toResponse())
+                .location(location.toResponse())
+                .type(treeType.toResponse())
+                .length(this.length)
+                .bottomDiameter(this.bottomDiameter)
+                .topDiameter(topDiameter)
+                .avgDiameter(avgDiameter)
+                .volume(volume)
+                .build();
     }
 
 }

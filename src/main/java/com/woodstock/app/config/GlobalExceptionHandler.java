@@ -3,6 +3,7 @@ package com.woodstock.app.config;
 import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.exception.account.AccountUserNotFoundException;
 import com.woodstock.app.utils.exception.global.DataNotFoundException;
+import com.woodstock.app.utils.exception.jobs.ForbidenJobRoleAccessException;
 import com.woodstock.app.utils.exception.jobs.JobsAlreadyAssignException;
 import com.woodstock.app.utils.exception.jobs.JobsNotFoundException;
 import com.woodstock.app.utils.exception.auth.ReEnteredPasswordNotEqualException;
@@ -70,7 +71,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            AuthorizationDeniedException.class
+            AuthorizationDeniedException.class,
+            ForbidenJobRoleAccessException.class
     })
     public ResponseEntity<ErrorResponse> handleForbiden(Exception ex, HttpServletRequest request) {
 

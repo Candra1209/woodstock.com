@@ -4,6 +4,7 @@ import com.woodstock.app.entity.*;
 import com.woodstock.app.models.request.tree.TreeRequest;
 import com.woodstock.app.repositorty.TreeRepository;
 import com.woodstock.app.utils.exception.global.InvalidJobAssignmentException;
+import com.woodstock.app.utils.exception.jobs.ForbidenJobRoleAccessException;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,14 @@ public class TreeServiceImpl extends BaseServiceImpl<TreeRepository, Tree>{
 
     private final TreeTypeServiceV2 treeTypeService;
     private final AccountInfoServiceImpl accountInfoService;
+    private final AccountServiceImpl accountService;
     private final LocationService locationService;
 
-    protected TreeServiceImpl(TreeRepository repository, EntityManager entityManager, TreeTypeServiceV2 treeTypeService, AccountInfoServiceImpl accountInfoService, LocationService locationService) {
+    protected TreeServiceImpl(TreeRepository repository, EntityManager entityManager, TreeTypeServiceV2 treeTypeService, AccountInfoServiceImpl accountInfoService, AccountServiceImpl accountService, LocationService locationService) {
         super(repository, entityManager);
         this.treeTypeService = treeTypeService;
         this.accountInfoService = accountInfoService;
+        this.accountService = accountService;
         this.locationService = locationService;
     }
 
@@ -81,6 +84,25 @@ public class TreeServiceImpl extends BaseServiceImpl<TreeRepository, Tree>{
 
         //save
         return save(newTree);
+    }
+
+    public Tree deleteTree(UUID id, String username) {
+
+        Account account = accountService.findByUsername(username);
+
+        boolean isAdmin = account.getRoles().stream().anyMatch(roles -> roles.getName() == RoleEnum.ROLE_ADMIN);
+
+        if (!isAdmin) {
+            AccountInfo scaller = accountInfoService.getAccountInfoByAccountUsername(account.getUsername());
+            boolean isScaller = scaller.getJobs().stream().anyMatch(jobs -> jobs.getName() == JobsEnum.SCALLER);
+
+            if (!isScaller) {
+                throw new ForbidenJobRoleAccessException("invalid job access : only scaller or admin can deleted tree");
+            }
+
+        }
+        return delete(id);
+
     }
 
 }
