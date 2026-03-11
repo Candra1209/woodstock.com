@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
                 ErrorResponse.builder()
                         .status(HttpStatus.FORBIDDEN.value())
                         .url(UrlBuilderHelper.getFullUrl(request))
-                        .message("CONFLICT : " + ex.getMessage())
+                        .message("FORBIDDEN : " + ex.getMessage())
                         .build()
         );
     }

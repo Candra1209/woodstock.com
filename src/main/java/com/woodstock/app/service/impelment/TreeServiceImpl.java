@@ -30,7 +30,12 @@ public class TreeServiceImpl extends BaseServiceImpl<TreeRepository, Tree>{
         this.locationService = locationService;
     }
 
-    public Tree saveNewTree(TreeRequest request){
+    public Tree saveNewTree(TreeRequest request, String username){
+
+        //check access permision
+        if(!isHaveAccess(username)){
+            throw new ForbidenJobRoleAccessException("invalid job access : only scaller or admin can add new tree");
+        }
 
         //find account
 
@@ -88,8 +93,18 @@ public class TreeServiceImpl extends BaseServiceImpl<TreeRepository, Tree>{
 
     public Tree deleteTree(UUID id, String username) {
 
-        Account account = accountService.findByUsername(username);
+       if(!isHaveAccess(username)) {
+           throw new ForbidenJobRoleAccessException("invalid job access : only scaller or admin can deleted tree");
+       }
+           return delete(id);
 
+    }
+
+    private boolean isHaveAccess(String username){
+
+        //make sure only role admin and user with scaller job can manipulate data
+
+        Account account = accountService.findByUsername(username);
         boolean isAdmin = account.getRoles().stream().anyMatch(roles -> roles.getName() == RoleEnum.ROLE_ADMIN);
 
         if (!isAdmin) {
@@ -97,11 +112,12 @@ public class TreeServiceImpl extends BaseServiceImpl<TreeRepository, Tree>{
             boolean isScaller = scaller.getJobs().stream().anyMatch(jobs -> jobs.getName() == JobsEnum.SCALLER);
 
             if (!isScaller) {
-                throw new ForbidenJobRoleAccessException("invalid job access : only scaller or admin can deleted tree");
+                return false;
             }
 
         }
-        return delete(id);
+
+        return true;
 
     }
 

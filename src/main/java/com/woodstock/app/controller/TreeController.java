@@ -6,7 +6,6 @@ import com.woodstock.app.models.params.SortParams;
 import com.woodstock.app.models.request.tree.TreeRequest;
 import com.woodstock.app.models.response.PagingResponse;
 import com.woodstock.app.models.response.SuccessResponse;
-import com.woodstock.app.models.response.tree.TreeMinResponse;
 import com.woodstock.app.models.response.tree.TreeResponse;
 import com.woodstock.app.service.impelment.TreeServiceImpl;
 import com.woodstock.app.utils.constants.RouteAppConstant;
@@ -36,9 +35,19 @@ public class TreeController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public TreeMinResponse addNewTree(@RequestBody TreeRequest request){
+    public ResponseEntity<SuccessResponse<TreeResponse>> addNewTree(@RequestBody TreeRequest request, Authentication authentication){
 
-        return  treeService.saveNewTree(request).toMinResponse();
+        String username = authentication.getName();
+
+        TreeResponse response = treeService.saveNewTree(request, username).toTreeResponse();
+
+        SuccessResponse<TreeResponse> result = SuccessResponse.<TreeResponse>builder()
+                .status(HttpStatus.CREATED)
+                .message("success created new tree")
+                .data(response)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
 
     }
 
@@ -67,8 +76,23 @@ public class TreeController {
 
         SuccessResponse<PagingResponse<TreeResponse>> result = SuccessResponse.<PagingResponse<TreeResponse>>builder()
                 .status(HttpStatus.OK)
-                .message("success get all account information from database")
+                .message("success get all tree information from database")
                 .data(paging)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<SuccessResponse<TreeResponse>> getTree(@PathVariable String id) {
+
+        UUID targetId = UUID.fromString(id);
+
+        SuccessResponse<TreeResponse> result = SuccessResponse.<TreeResponse>builder()
+                .status(HttpStatus.OK)
+                .message("success find tree with id : " + id)
+                .data(treeService.findbyId(targetId).toTreeResponse())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -84,7 +108,7 @@ public class TreeController {
 
         SuccessResponse<TreeResponse> result = SuccessResponse.<TreeResponse>builder()
                 .status(HttpStatus.OK)
-                .message("success get all account information from database")
+                .message("success deleted tree with id : " + id)
                 .data(target)
                 .build();
 

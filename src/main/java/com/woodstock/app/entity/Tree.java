@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Tree {
+public class Tree extends BaseEntity {
 
     @Id
     @GeneratedValue
