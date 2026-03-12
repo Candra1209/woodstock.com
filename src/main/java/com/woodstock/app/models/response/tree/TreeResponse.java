@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -40,5 +41,15 @@ public class TreeResponse {
     @JsonProperty("avg_diameter")
     private Double avgDiameter;
     private Double volume;
+
+    @JsonProperty(value = "created_by")
+    private String createdBy;
+    @JsonProperty(value = "update_by")
+    private String updatedBy;
+
+    @JsonProperty(value = "created_at")
+    private LocalDateTime createdAt;
+    @JsonProperty(value = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

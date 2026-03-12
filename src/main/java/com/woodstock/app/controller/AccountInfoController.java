@@ -114,7 +114,7 @@ public class AccountInfoController {
 
     @PutMapping("/{id}/update")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<SuccessResponse<AccountInfoResponse>> updateInfobyAdmin(@PathVariable String id, @RequestBody AccountInfoRequest request){
+    public ResponseEntity<SuccessResponse<AccountInfoResponse>> updateInfoByAdmin(@PathVariable String id, @RequestBody AccountInfoRequest request){
 
         SuccessResponse<AccountInfoResponse> result = SuccessResponse.<AccountInfoResponse>builder()
                 .status(HttpStatus.CREATED)

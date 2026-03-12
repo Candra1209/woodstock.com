@@ -36,10 +36,6 @@ public class CustomUserDetailService implements UserDetailsService {
                         }
                 ).collect(Collectors.toSet());
 
-        return new User(
-                account.getUsername(),
-                account.getPassword(),
-                authorities
-        );
+        return new CustomUserDetails(account.getId(), account.getUsername(),account.getPassword(), authorities);
     }
 }

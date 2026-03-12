@@ -39,7 +39,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 Claims claims = jwtUtils.getClaims(token);
-                List<String> roles = claims.get("roles", List.class);
 
                 Object rolesObj = claims.get("roles");
 
