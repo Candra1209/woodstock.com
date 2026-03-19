@@ -24,6 +24,6 @@ public class AuditableEntity extends BaseEntity {
     @LastModifiedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by_account_id")
-    @JsonIgnore//ignore completely to avoid StackOverflow exception by User.lastModifiedByUser logic, use DTO
+    @JsonIgnore
     private Account updatedBy;
 }

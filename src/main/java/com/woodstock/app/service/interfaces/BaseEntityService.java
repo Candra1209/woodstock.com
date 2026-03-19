@@ -19,6 +19,7 @@ public interface BaseEntityService<
     R delete(UUID id);
     void delete(R r);
     R Update(R r);
+    R getReferenceById(UUID id);
     Page<R> getPagging(Pageable pageable);
     Page<R> getPagging(Pageable pageable, Specification<R> specification);
 

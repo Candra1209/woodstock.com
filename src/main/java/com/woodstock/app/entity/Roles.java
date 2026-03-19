@@ -2,17 +2,15 @@ package com.woodstock.app.entity;
 
 import com.woodstock.app.models.response.roles.RolesResponse;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

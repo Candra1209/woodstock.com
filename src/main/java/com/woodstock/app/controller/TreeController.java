@@ -1,5 +1,4 @@
 package com.woodstock.app.controller;
-
 import com.woodstock.app.entity.Tree;
 import com.woodstock.app.models.params.PageParams;
 import com.woodstock.app.models.params.SortParams;
@@ -114,6 +113,24 @@ public class TreeController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
 
+    }
+
+    @PutMapping("/{id}/update")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<SuccessResponse<TreeResponse>> updatedTree(@PathVariable String id, @RequestBody TreeRequest request, Authentication authentication) {
+
+        UUID treeId = UUID.fromString(id);
+        String username = authentication.getName();
+
+        TreeResponse response = treeService.updateTree(treeId,request,username).toTreeResponse();
+
+        SuccessResponse<TreeResponse> result = SuccessResponse.<TreeResponse>builder()
+                .status(HttpStatus.OK)
+                .message("success success tree with id : " + id)
+                .data(response)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 }

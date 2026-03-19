@@ -1,17 +1,15 @@
 package com.woodstock.app.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "jobs")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

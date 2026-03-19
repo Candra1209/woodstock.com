@@ -10,12 +10,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tree")
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Tree extends AuditableEntity {
+public class Tree extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -81,9 +80,7 @@ public class Tree extends AuditableEntity {
                 .topDiameter(topDiameter)
                 .avgDiameter(avgDiameter)
                 .volume(volume)
-                .createdBy(getCreatedBy().getUsername())
                 .createdAt(getCreateAt())
-                .updatedBy(getUpdatedBy().getUsername())
                 .updatedAt(getUpdateAt())
                 .build();
     }

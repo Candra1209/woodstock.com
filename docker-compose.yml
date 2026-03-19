@@ -11,5 +11,28 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  mongodb:
+    container_name: woodstock_mongo
+    image: mongo
+    ports:
+      - 27070:27017
+    volumes:
+      - mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rinmaa
+      MONGO_INITDB_ROOT_PASSWORD: rinmaa
+
+  mongo-express:
+    container_name: woodstock_mongo_express
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: rinmaa
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rinmaa
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+
 volumes:
   pgdata:
+  mongo:
