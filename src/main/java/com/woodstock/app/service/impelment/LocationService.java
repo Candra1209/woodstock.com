@@ -30,4 +30,10 @@ public class LocationService extends BaseServiceImpl<LocationPostRepository, Loc
 
     }
 
+    public boolean isExists(UUID id){
+
+        return repository.existsById(id);
+
+    }
+
 }
