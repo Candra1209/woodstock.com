@@ -9,6 +9,7 @@ import com.woodstock.app.utils.exception.jobs.JobsNotFoundException;
 import com.woodstock.app.utils.exception.auth.ReEnteredPasswordNotEqualException;
 import com.woodstock.app.utils.exception.auth.UsernameAlreadyExistsException;
 import com.woodstock.app.utils.exception.location.LocationNotFoundException;
+import com.woodstock.app.utils.exception.tree.TreeNotFoundExeption;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -43,7 +44,8 @@ public class GlobalExceptionHandler {
             AccountUserNotFoundException.class,
             JobsNotFoundException.class,
             DataNotFoundException.class,
-            LocationNotFoundException.class
+            LocationNotFoundException.class,
+            TreeNotFoundExeption.class
 
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(Exception ex, HttpServletRequest request) {

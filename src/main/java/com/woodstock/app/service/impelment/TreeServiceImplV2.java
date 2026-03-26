@@ -10,7 +10,6 @@ import com.woodstock.app.models.response.tree.TreeResponseV2;
 import com.woodstock.app.models.response.tree_type.TreeTypeResponse;
 import com.woodstock.app.repositorty.mongo_repository.TreeRepositoryMongo;
 import com.woodstock.app.utils.calculation.LumberCalculation;
-import com.woodstock.app.utils.exception.global.InvalidJobAssignmentException;
 import com.woodstock.app.utils.exception.jobs.ForbidenJobRoleAccessException;
 import com.woodstock.app.utils.exception.location.LocationNotFoundException;
 import com.woodstock.app.utils.exception.tree.TreeNotFoundExeption;
@@ -20,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,27 +43,7 @@ public class TreeServiceImplV2 {
     public TreeResponseV2 addNewTree(TreeRequest request){
 
 
-        UUID locationId = UUID.fromString(request.getLocation_id());
-        if(!locationService.isExists(locationId)){
-            throw new LocationNotFoundException("there no location with id " + locationId + " registered");
-        }
-
-        UUID treeTypeId = UUID.fromString(request.getTree_type_id());
-        if (!treeTypeService.isExists(treeTypeId)) {
-            throw new TreeTypeNotFoundException("there no tree type with id " + treeTypeId + " registered");
-        }
-
-        UUID scalerId = UUID.fromString(request.getScaller_id());
-        AccountInfo scaler = accountInfoService.getReferenceById(scalerId);
-        if (!scaler.getJobs().stream().anyMatch(job -> job.getName() == JobsEnum.SCALLER)){
-            throw new ForbidenJobRoleAccessException(String.format("Account with id %s is not scaler", scaler.getId()));
-        }
-
-        UUID fallerId = UUID.fromString(request.getFaller_id());
-        AccountInfo faller = accountInfoService.getReferenceById(fallerId);
-        if (!faller.getJobs().stream().anyMatch(job -> job.getName() == JobsEnum.FALLER)){
-            throw new ForbidenJobRoleAccessException(String.format("Account with id %s is not faller", faller.getId()));
-        }
+        checkCredential(request);
 
         double avgDiameter = LumberCalculation.getAvgDiameter(request.getTop_diameter(), request.getBottom_diameter());
 
@@ -77,10 +57,10 @@ public class TreeServiceImplV2 {
                 .topDiameter(request.getTop_diameter())
                 .avgDiameter(avgDiameter)
                 .volume(volumeRound)
-                .locationId(locationId.toString())
-                .treeTypeId(treeTypeId.toString())
-                .scalerId(scalerId.toString())
-                .fallerId(fallerId.toString())
+                .locationId(request.getLocation_id())
+                .treeTypeId(request.getTree_type_id())
+                .scalerId(request.getScaller_id())
+                .fallerId(request.getFaller_id())
                 .isDeleted(false)
                 .build();
 
@@ -106,7 +86,7 @@ public class TreeServiceImplV2 {
 
         AccountInfo scaler = accountInfoService.findbyId(UUID.fromString(tree.getScalerId()));
 
-        AccountInfo faller = accountInfoService.findbyId(UUID.fromString(tree.getScalerId()));
+        AccountInfo faller = accountInfoService.findbyId(UUID.fromString(tree.getFallerId()));
 
 
         return TreeResponseV2.builder()
@@ -139,7 +119,7 @@ public class TreeServiceImplV2 {
 
     public PagingResponse<TreeResponseV2> getDataPagging(Pageable pageable) {
 
-        Page<TreeResponseV2> page = treeRepositoryMongo.findAll(pageable).map(this::toFullResponse);
+        Page<TreeResponseV2> page = treeRepositoryMongo.findAllByIsDeletedFalse(pageable).map(this::toFullResponse);
 
         PagingResponse<TreeResponseV2> response = PagingResponse.<TreeResponseV2>builder()
                 .size(page.getSize())
@@ -150,6 +130,88 @@ public class TreeServiceImplV2 {
                 .build();
 
         return response;
+
+    }
+
+    public TreeResponseV2 updateTree(@RequestBody TreeRequest request){
+
+        Tree target = treeRepositoryMongo.findByIdAndIsDeletedFalse(request.getId()).orElseThrow(
+                () -> new TreeNotFoundExeption("there no tree with id " + request.getId())
+        );
+
+        Tree updatedTree = updateTree(target, request);
+
+        treeRepositoryMongo.save(updatedTree);
+
+        return toFullResponse(updatedTree);
+
+    }
+
+    private Tree updateTree(Tree initialTree, TreeRequest request){
+
+        checkCredential(request);
+
+        if (!initialTree.getScalerId().equals(request.getScaller_id())){
+            initialTree.setScalerId(request.getScaller_id());
+        }
+
+        if (!initialTree.getFallerId().equals(request.getFaller_id())){
+            initialTree.setFallerId(request.getFaller_id());
+        }
+
+        if (!initialTree.getTreeTypeId().equals(request.getTree_type_id())){
+            initialTree.setTreeTypeId(request.getTree_type_id());
+        }
+
+        if (!initialTree.getLocationId().equals(request.getLocation_id())){
+            initialTree.setLocationId(request.getLocation_id());
+        }
+
+        if (initialTree.getLength() != request.getLength() ) {
+            initialTree.setLength(request.getLength());
+        }
+
+        if (initialTree.getBottomDiameter() != request.getBottom_diameter()){
+            initialTree.setBottomDiameter(request.getBottom_diameter());
+        }
+
+        if (initialTree.getTopDiameter() != request.getTop_diameter() ){
+            initialTree.setTopDiameter(request.getTop_diameter());
+        }
+
+        Double avgDiameter = LumberCalculation.getAvgDiameter(initialTree.getTopDiameter(), initialTree.getBottomDiameter());
+        initialTree.setAvgDiameter(avgDiameter);
+
+        Double volume = LumberCalculation.getVolumePerCubic(avgDiameter, initialTree.getLength());
+        initialTree.setVolume(LumberCalculation.roundDown(volume));
+
+        return initialTree;
+
+    }
+
+    private void checkCredential(TreeRequest request) {
+
+        UUID locationId = UUID.fromString(request.getLocation_id());
+        if(!locationService.isExists(locationId)){
+            throw new LocationNotFoundException("there no location with id " + locationId + " registered");
+        }
+
+        UUID treeTypeId = UUID.fromString(request.getTree_type_id());
+        if (!treeTypeService.isExists(treeTypeId)) {
+            throw new TreeTypeNotFoundException("there no tree type with id " + treeTypeId + " registered");
+        }
+
+        UUID scalerId = UUID.fromString(request.getScaller_id());
+        AccountInfo scaler = accountInfoService.getReferenceById(scalerId);
+        if (!scaler.getJobs().stream().anyMatch(job -> job.getName() == JobsEnum.SCALLER)){
+            throw new ForbidenJobRoleAccessException(String.format("Account with id %s is not scaler", scaler.getId()));
+        }
+
+        UUID fallerId = UUID.fromString(request.getFaller_id());
+        AccountInfo faller = accountInfoService.getReferenceById(fallerId);
+        if (!faller.getJobs().stream().anyMatch(job -> job.getName() == JobsEnum.FALLER)){
+            throw new ForbidenJobRoleAccessException(String.format("Account with id %s is not faller", faller.getId()));
+        }
 
     }
 }

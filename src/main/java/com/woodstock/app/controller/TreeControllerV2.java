@@ -4,6 +4,7 @@ import com.woodstock.app.models.params.PageParams;
 import com.woodstock.app.models.request.tree.TreeRequest;
 import com.woodstock.app.models.response.PagingResponse;
 import com.woodstock.app.models.response.SuccessResponse;
+import com.woodstock.app.models.response.tree.TreeResponse;
 import com.woodstock.app.models.response.tree.TreeResponseV2;
 import com.woodstock.app.service.impelment.TreeServiceImplV2;
 import com.woodstock.app.utils.constants.RouteAppConstant;
@@ -67,12 +68,28 @@ public class TreeControllerV2 {
 
         SuccessResponse<?> result = SuccessResponse.builder()
                 .status(status)
-                .message("success created new tree")
+                .message("tree with id " + id + " is deleted successfully")
                 .data(response)
                 .build();
 
         return ResponseEntity.status(status).body(result);
 
+    }
+
+    @PutMapping
+    public ResponseEntity<SuccessResponse<?>> updateTree(@RequestBody TreeRequest request){
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        TreeResponseV2 response = treeServiceImpl.updateTree(request);
+
+        SuccessResponse<?> result = SuccessResponse.builder()
+                .status(status)
+                .message("tree with id " + request.getId() + " is deleted successfully")
+                .data(response)
+                .build();
+
+        return ResponseEntity.status(status).body(result);
     }
 
 }

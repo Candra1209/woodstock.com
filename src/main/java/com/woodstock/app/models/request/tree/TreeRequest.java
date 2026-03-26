@@ -9,6 +9,7 @@ import java.util.UUID;
 @Builder
 public class TreeRequest {
 
+    private String id = null;
     private String scaller_id;
     private String faller_id;
     private String tree_type_id;
