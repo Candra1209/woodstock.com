@@ -85,4 +85,8 @@ public class TreeTypeService implements ServiceInterface<TreeTypeRequest, TreeTy
         return repository.save(updeted).toResponse();
 
     }
+
+    public boolean isExists(UUID id) {
+        return repository.existsById(id);
+    }
 }

@@ -12,8 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tree_type")
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

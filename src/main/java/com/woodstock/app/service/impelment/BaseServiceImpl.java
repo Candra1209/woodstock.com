@@ -95,4 +95,12 @@ public abstract class BaseServiceImpl<
 
         return repository.findAll(specification, pageable);
     }
+
+    public R getReferenceById(UUID id) {
+        return repository.getReferenceById(id);
+    }
+
+    public boolean existById(UUID id){
+        return repository.existsById(id);
+    }
 }

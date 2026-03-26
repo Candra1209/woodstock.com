@@ -3,10 +3,7 @@ package com.woodstock.app.entity;
 import com.woodstock.app.models.response.account_info.AccountInfoResponse;
 import com.woodstock.app.models.response.auth.RegisterResponse;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashSet;
@@ -37,7 +34,7 @@ public class AccountInfo extends BaseEntity {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_jobs",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))

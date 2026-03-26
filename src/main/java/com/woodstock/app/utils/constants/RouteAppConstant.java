@@ -11,5 +11,6 @@ public class RouteAppConstant {
     public final static String ACCOUNT = "/account";
     public final static String ACCOUNT_INFO = "/account/info";
     public final static String LOCATION = "/location";
+    public final static String TREE = "/tree";
 
 }

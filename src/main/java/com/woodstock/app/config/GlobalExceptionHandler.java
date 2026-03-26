@@ -3,10 +3,13 @@ package com.woodstock.app.config;
 import com.woodstock.app.models.response.ErrorResponse;
 import com.woodstock.app.utils.exception.account.AccountUserNotFoundException;
 import com.woodstock.app.utils.exception.global.DataNotFoundException;
+import com.woodstock.app.utils.exception.jobs.ForbidenJobRoleAccessException;
 import com.woodstock.app.utils.exception.jobs.JobsAlreadyAssignException;
 import com.woodstock.app.utils.exception.jobs.JobsNotFoundException;
 import com.woodstock.app.utils.exception.auth.ReEnteredPasswordNotEqualException;
 import com.woodstock.app.utils.exception.auth.UsernameAlreadyExistsException;
+import com.woodstock.app.utils.exception.location.LocationNotFoundException;
+import com.woodstock.app.utils.exception.tree.TreeNotFoundExeption;
 import com.woodstock.app.utils.tool.UrlBuilderHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
@@ -40,7 +43,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             AccountUserNotFoundException.class,
             JobsNotFoundException.class,
-            DataNotFoundException.class
+            DataNotFoundException.class,
+            LocationNotFoundException.class,
+            TreeNotFoundExeption.class
 
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(Exception ex, HttpServletRequest request) {
@@ -70,7 +75,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            AuthorizationDeniedException.class
+            AuthorizationDeniedException.class,
+            ForbidenJobRoleAccessException.class
     })
     public ResponseEntity<ErrorResponse> handleForbiden(Exception ex, HttpServletRequest request) {
 
@@ -78,7 +84,7 @@ public class GlobalExceptionHandler {
                 ErrorResponse.builder()
                         .status(HttpStatus.FORBIDDEN.value())
                         .url(UrlBuilderHelper.getFullUrl(request))
-                        .message("CONFLICT : " + ex.getMessage())
+                        .message("FORBIDDEN : " + ex.getMessage())
                         .build()
         );
     }
